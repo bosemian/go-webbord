@@ -1,5 +1,3 @@
-create database gowebbord;
-
 create table users (
 	id serial,
 	username varchar not null,

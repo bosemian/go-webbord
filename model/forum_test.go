@@ -22,3 +22,40 @@ func TestFindAllForum(t *testing.T) {
 		t.Fatalf("FindAllForum expected returned 3 forums; got %d", l)
 	}
 }
+
+func TestCreateForum(t *testing.T) {
+	db := prepareDB(t)
+	defer db.Close()
+
+	id, err := model.CreateForum(db, &model.Forum{
+		Title: "title test",
+	})
+
+	if err != nil {
+		t.Fatalf("CreateForum expected return nil error: got %v", err)
+	}
+
+	if id < 0 {
+		t.Fatalf("CreateForum expected return positive id; got %d", id)
+	}
+
+	var cnt int
+	db.QueryRow(`select count(*) from forums`).Scan(&cnt)
+	if cnt != 1 {
+		t.Fatalf("CreateForum expected insert 1 forum; got %d", cnt)
+	}
+}
+
+func TestDeleteForum(t *testing.T) {
+	db := prepareDB(t)
+	defer db.Close()
+
+	id, err := model.CreateForum(db, &model.Forum{
+		Title: "title test",
+	})
+	err = model.DeleteForum(db, id)
+	if err != nil {
+		t.Fatalf("DeletedForum expected return 1 got; %v", err)
+		return
+	}
+}

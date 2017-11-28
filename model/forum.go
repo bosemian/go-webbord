@@ -1,7 +1,9 @@
 package model
 
-import "time"
-import "database/sql"
+import (
+	"database/sql"
+	"time"
+)
 
 type Forum struct {
 	ID        int
@@ -64,9 +66,21 @@ func CreateForum(db *sql.DB, forum *Forum) (int, error) {
 }
 
 // UpdateForum update forum by data forum
-// func UpdateForum(db *sql.DB) (*Forum, error) {
+func UpdateForum(db *sql.DB, f *Forum) (*Forum, error) {
+	var forum Forum
+	err := db.QueryRow(`
+		update forums
+			set title = $2, updated_at = $3
+			where id = $1
+			returning id, title, created_at, updated_at
+	`, f.ID, f.Title, time.Now()).Scan(&forum.ID, &forum.Title, &forum.CreatedAt, &forum.UpdatedAt)
 
-// }
+	if err != nil {
+		return nil, err
+	}
+
+	return &forum, nil
+}
 
 // DeleteForum delate forum by ForumID
 func DeleteForum(db *sql.DB, forumID int) error {
@@ -78,4 +92,20 @@ func DeleteForum(db *sql.DB, forumID int) error {
 		return err
 	}
 	return nil
+}
+
+func FindForumById(db *sql.DB, id int) (*Forum, error) {
+	var forum Forum
+	err := db.QueryRow(`
+		select
+			id, title, created_at, updated_at
+		from forums
+		where id = $1
+	`, id).Scan(&forum.ID, &forum.Title, &forum.CreatedAt, &forum.UpdatedAt)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &forum, nil
 }

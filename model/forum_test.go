@@ -51,11 +51,34 @@ func TestDeleteForum(t *testing.T) {
 	defer db.Close()
 
 	id, err := model.CreateForum(db, &model.Forum{
-		Title: "title test",
+		Title: "title for delete forum",
 	})
 	err = model.DeleteForum(db, id)
 	if err != nil {
 		t.Fatalf("DeletedForum expected return 1 got; %v", err)
 		return
+	}
+}
+
+func TestUpdateForum(t *testing.T) {
+	db := prepareDB(t)
+	defer db.Close()
+
+	id, err := model.CreateForum(db, &model.Forum{
+		Title: "title for update forum",
+	})
+
+	if err != nil {
+		t.Fatalf("CreateForum expected return forum got; %v", err)
+	}
+
+	forum, err := model.FindForumById(db, id)
+	if err != nil {
+		t.Fatalf("FindForumById expected return forum got; %v", err)
+	}
+	forum.Title = "title has updated"
+	_, err = model.UpdateForum(db, forum)
+	if err != nil {
+		t.Fatalf("UpdateForum expected return forumed got; %v", err)
 	}
 }

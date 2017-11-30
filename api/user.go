@@ -51,7 +51,7 @@ type UserSignOutRequest struct {
 // Validate UserSignOutRequest
 func (u *UserSignOutRequest) Validate() error {
 	if len(u.Token) == 0 {
-		return fmt.Errorf("Username has required")
+		return fmt.Errorf("Token has required")
 	}
 	return nil
 }

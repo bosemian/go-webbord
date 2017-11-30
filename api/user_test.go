@@ -6,7 +6,7 @@ import (
 	"github.com/bosemian/go-webbord/api"
 )
 
-func TestUserValidateSignInReqiest(t *testing.T) {
+func TestUserValidateSignInRequest(t *testing.T) {
 	testCases := []struct {
 		req      api.UserSignInRequest
 		hasError bool
@@ -37,4 +37,27 @@ func TestUserValidateSignInReqiest(t *testing.T) {
 		}
 	}
 
+}
+
+func TestUserSignOutRequest(t *testing.T) {
+	testCases := []struct {
+		req      api.UserSignOutRequest
+		hasError bool
+	}{
+		{api.UserSignOutRequest{}, true},
+		{api.UserSignOutRequest{
+			Token: "1234567890",
+		}, false},
+	}
+
+	for _, tc := range testCases {
+		err := tc.req.Validate()
+		if tc.hasError && err == nil {
+			t.Errorf("expected has error; got nil")
+		}
+
+		if !tc.hasError && err != nil {
+			t.Errorf("expected has not error; got %v", err)
+		}
+	}
 }

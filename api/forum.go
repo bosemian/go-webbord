@@ -50,7 +50,6 @@ func (req *ForumUpdateRequest) Validate() error {
 		return fmt.Errorf("id and forumname has required")
 	}
 
-
 	if req.ForumID <= 0 || utf8.RuneCountInString(req.ForumName) < 4 {
 		return fmt.Errorf("id must be has a 0 and forumname must be 4 char")
 	}

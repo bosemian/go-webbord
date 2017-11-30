@@ -61,3 +61,34 @@ func TestUserSignOutRequest(t *testing.T) {
 		}
 	}
 }
+
+func TestValidateUserChangePassword(t *testing.T) {
+	testCases := []struct {
+		req      api.UserChangePasswordRequest
+		hasError bool
+	}{
+		{api.UserChangePasswordRequest{}, true},
+		{api.UserChangePasswordRequest{
+			OldPassword: "speedboy",
+			NewPassword: "",
+		}, true},
+		{api.UserChangePasswordRequest{
+			OldPassword: "",
+			NewPassword: "speedboy",
+		}, true},
+		{api.UserChangePasswordRequest{
+			OldPassword: "speedboy",
+			NewPassword: "siwanonmun",
+		}, false},
+	}
+
+	for _, tc := range testCases {
+		err := tc.req.Validate()
+		if tc.hasError && err == nil {
+			t.Errorf("expected has error; got nil")
+		}
+		if !tc.hasError && err != nil {
+			t.Errorf("expected has not error; got %v", err)
+		}
+	}
+}

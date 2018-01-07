@@ -10,8 +10,9 @@ import (
 type UserController interface {
 	SignIn(*UserSignInRequest) (*UserSignInResponse, error)
 	SignOut(*UserSignOutRequest) (*UserSignOutResponse, error)
-	ChangePassword(*UserChangePasswordRequest) (*UserChangePasswordResponse, error)
-	Get(int) (*User, error)
+	ChangePassword(*UserChangePasswordRequest) error
+	GetAllUsers(int) (*User, error)
+	GetUser(int) *Users
 }
 
 // UserSignInRequest is a struct of
@@ -83,10 +84,6 @@ func (u *UserChangePasswordRequest) Validate() error {
 	return nil
 }
 
-type UserChangePasswordResponse struct {
-	Password string
-}
-
 // User is a struct of get user for UserController
 type User struct {
 	UserId    int
@@ -94,6 +91,11 @@ type User struct {
 	Password  string
 	CreatedAt time.Time
 	UpdatedAt time.Time
+}
+
+type Users struct {
+	count int
+	Users []*User
 }
 
 // CurrentUser is a struct for any request

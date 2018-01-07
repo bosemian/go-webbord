@@ -1,7 +1,9 @@
 package api
 
 import (
+	"fmt"
 	"time"
+	"unicode/utf8"
 )
 
 type TopicController interface {
@@ -18,12 +20,48 @@ type TopicCreateRequest struct {
 	TopicName string
 }
 
+// Validate TopicCreateRequest
+func (t *TopicCreateRequest) Validate() error {
+	if len(t.Token) == 0 {
+		return fmt.Errorf("token is empty")
+	}
+	if t.ForumID <= 0 {
+		return fmt.Errorf("forumid empty")
+	}
+	if len(t.TopicName) == 0 {
+		return fmt.Errorf("topicname is empty")
+	}
+	if utf8.RuneCountInString(t.TopicName) < 6 {
+		return fmt.Errorf("topicname required at least 6 character")
+	}
+	return nil
+}
+
 type TopicCreateResponse struct {
 	*Topic
 }
 
 type TopicUpdateRequest struct {
-	*Topic
+	Token        string
+	ForumID      int
+	NewTopicName string
+}
+
+// Validate test evry request update Topic
+func (req *TopicUpdateRequest) Validate() error {
+	if req.ForumID <= 0 {
+		return fmt.Errorf("forumid is empty")
+	}
+	if len(req.Token) == 0 {
+		return fmt.Errorf("token is empty")
+	}
+	if len(req.NewTopicName) == 0 {
+		return fmt.Errorf("newtopicname is empty")
+	}
+	if utf8.RuneCountInString(req.NewTopicName) < 6 {
+		return fmt.Errorf("newtopicname required at least 6 character")
+	}
+	return nil
 }
 
 type TopicUpdateResponse struct {

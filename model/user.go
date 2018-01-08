@@ -15,7 +15,7 @@ type User struct {
 	UpdatedAt time.Time
 }
 
-// Find User by username
+// Find User by username return username just one Row
 func FindUserByUsername(db *sql.DB, username string) (*User, error) {
 	var user User
 	err := db.QueryRow(`
@@ -37,4 +37,20 @@ func FindUserByUsername(db *sql.DB, username string) (*User, error) {
 		return nil, err
 	}
 	return &user, nil
+}
+
+// CreateUser insert user to db return user just only one row
+func CreateUser(db *sql.DB, u *User) (int, error) {
+	var id int
+	err := db.QueryRow(`
+		insert into users (
+			id, username, password
+		) values (
+			$1, $2, $3
+		) returning id
+	`, 1, u.Username, u.Password).Scan(&id)
+	if err != nil {
+		return 0, err
+	}
+	return id, nil
 }

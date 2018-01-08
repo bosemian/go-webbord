@@ -82,7 +82,7 @@ func UpdateForum(db *sql.DB, f *Forum) (*Forum, error) {
 	return &forum, nil
 }
 
-// DeleteForum delate forum by ForumID
+// DeleteForum delete forum by ForumID
 func DeleteForum(db *sql.DB, forumID int) error {
 	_, err := db.Exec(`
 		delete from forums
@@ -94,7 +94,8 @@ func DeleteForum(db *sql.DB, forumID int) error {
 	return nil
 }
 
-func FindForumById(db *sql.DB, id int) (*Forum, error) {
+// FindForumByID return a just only forum
+func FindForumByID(db *sql.DB, id int) (*Forum, error) {
 	var forum Forum
 	err := db.QueryRow(`
 		select
@@ -106,6 +107,5 @@ func FindForumById(db *sql.DB, id int) (*Forum, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	return &forum, nil
 }

@@ -39,7 +39,7 @@ create index comments_created_at_idx on comments (created_at desc);
 create table forum_topics (
 	forum_id int,
 	topic_id int,
-	primary key (forum_id, topic_id),
+	primary key (topic_id),
 	foreign key (forum_id) references forums (id),
 	foreign key (topic_id) references topics (id)
 );

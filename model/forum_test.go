@@ -2,6 +2,7 @@ package model_test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/bosemian/go-webbord/model"
 )
@@ -50,10 +51,9 @@ func TestDeleteForum(t *testing.T) {
 	db := prepareDB(t)
 	defer db.Close()
 
-	id, err := model.CreateForum(db, &model.Forum{
-		Title: "title for delete forum",
-	})
-	err = model.DeleteForum(db, id)
+	db.Exec(`insert into forums (id, title) values (1, 'title1')`)
+
+	err := model.DeleteForum(db, 1)
 	if err != nil {
 		t.Fatalf("DeletedForum expected return 1 got; %v", err)
 		return
@@ -63,22 +63,15 @@ func TestDeleteForum(t *testing.T) {
 func TestUpdateForum(t *testing.T) {
 	db := prepareDB(t)
 	defer db.Close()
+	// prepare data to test
+	db.Exec(`insert into forums (id, title) values (1, 'title1')`)
 
-	id, err := model.CreateForum(db, &model.Forum{
-		Title: "title for update forum",
+	_, err := model.UpdateForum(db, &model.Forum{
+		ID:        1,
+		Title:     "new forum updated",
+		UpdatedAt: time.Now(),
 	})
-
 	if err != nil {
-		t.Fatalf("CreateForum expected return forum got; %v", err)
-	}
-
-	forum, err := model.FindForumById(db, id)
-	if err != nil {
-		t.Fatalf("FindForumById expected return forum got; %v", err)
-	}
-	forum.Title = "title has updated"
-	_, err = model.UpdateForum(db, forum)
-	if err != nil {
-		t.Fatalf("UpdateForum expected return forumed got; %v", err)
+		t.Fatalf("UpdateForum expected return forum updated got; %v", err)
 	}
 }

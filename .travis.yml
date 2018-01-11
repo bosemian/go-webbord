@@ -8,4 +8,4 @@ before_install:
   - go get github.com/mattn/goveralls
 
 scrips:
-  - GOPATH/bin/goveralls -service=travis-ci
+  - $HOME/bin/goveralls -service=travis-ci

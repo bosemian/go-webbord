@@ -29,15 +29,14 @@ func TestCreateComment(t *testing.T) {
 	defer db.Close()
 
 	id, err := model.CreateComment(db, &model.Comment{
-		ID:        1,
 		Comment:   "This is a comment",
 		CreatedAt: time.Now(),
 	})
 	if err != nil {
 		t.Errorf(`CreateComment expected nil; but got %v`, err)
 	}
-	if id < 0 {
-		t.Errorf(`CreateComment expected id value is not 0`)
+	if id <= 0 {
+		t.Errorf(`CreateComment expected id value is not 0; got %v`, id)
 	}
 }
 
@@ -63,6 +62,7 @@ func TestDeleteComment(t *testing.T) {
 	defer db.Close()
 
 	db.Exec(`insert into comments (id, comment) values (1, 'comment1')`)
+
 	err := model.DeleteComment(db, 2)
 	if err != nil {
 		t.Errorf(`DeleteComment expected return nil; but got %v`, err)

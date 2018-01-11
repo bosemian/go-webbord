@@ -36,7 +36,7 @@ func TestCreateForum(t *testing.T) {
 		t.Fatalf("CreateForum expected return nil error: got %v", err)
 	}
 
-	if id < 0 {
+	if id <= 0 {
 		t.Fatalf("CreateForum expected return positive id; got %d", id)
 	}
 

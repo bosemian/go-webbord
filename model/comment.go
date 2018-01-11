@@ -45,9 +45,11 @@ func FindAllComment(db *sql.DB) ([]*Comment, error) {
 func CreateComment(db *sql.DB, c *Comment) (int, error) {
 	var id int
 	err := db.QueryRow(`
-		insert comments
-		into (comment, created_at)
-		values ($1, $2)
+		insert into comments (
+			comment, created_at
+		) values (
+			$1, $2
+		) returning id
 	`, c.Comment, c.CreatedAt).Scan(&id)
 	if err != nil {
 		return 0, nil
@@ -74,17 +76,12 @@ func UpdateComment(db *sql.DB, c *Comment) error {
 
 // DeleteComment delete from comment table
 func DeleteComment(db *sql.DB, id int) error {
-	row, err := db.Exec(`
+	_, err := db.Exec(`
 		delete from comments
 		where id = $1
 	`, id)
 	if err != nil {
 		return err
 	}
-	_, err = row.RowsAffected()
-	if err != nil {
-		return err
-	}
-
 	return nil
 }

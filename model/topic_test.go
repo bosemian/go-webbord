@@ -34,7 +34,7 @@ func TestCreateTopics(t *testing.T) {
 		t.Errorf(`CreateTopic expected return only one topic; but got %v`, err)
 	}
 
-	if id < 0 {
+	if id <= 0 {
 		t.Fatalf("CreateTopic expected return positive id; got %d", id)
 	}
 

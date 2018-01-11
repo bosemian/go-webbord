@@ -66,12 +66,12 @@ func TestUpdateForum(t *testing.T) {
 	// prepare data to test
 	db.Exec(`insert into forums (id, title) values (1, 'title1')`)
 
-	_, err := model.UpdateForum(db, &model.Forum{
+	err := model.UpdateForum(db, &model.Forum{
 		ID:        1,
 		Title:     "new forum updated",
 		UpdatedAt: time.Now(),
 	})
 	if err != nil {
-		t.Fatalf("UpdateForum expected return forum updated got; %v", err)
+		t.Fatalf("UpdateForum expected return nil; but got %v", err)
 	}
 }

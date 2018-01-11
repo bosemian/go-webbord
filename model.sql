@@ -29,7 +29,7 @@ create index topics_updated_at_idx on topics (updated_at desc);
 
 create table comments (
 	id serial,
-	content varchar not null,
+	comment varchar not null,
 	created_at timestamp not null default now(),
 	updated_at timestamp not null default now(),
 	primary key (id)

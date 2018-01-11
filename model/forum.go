@@ -52,11 +52,11 @@ func CreateForum(db *sql.DB, forum *Forum) (int, error) {
 	var id int
 	err := db.QueryRow(`
 		insert into forums (
-			title
+			title, created_at
 		) values (
-			$1
+			$1, $2
 		) returning id
-	`, forum.Title).Scan(&id)
+	`, forum.Title, time.Now()).Scan(&id)
 
 	if err != nil {
 		return 0, err
@@ -66,20 +66,16 @@ func CreateForum(db *sql.DB, forum *Forum) (int, error) {
 }
 
 // UpdateForum update forum by data forum
-func UpdateForum(db *sql.DB, f *Forum) (*Forum, error) {
-	var forum Forum
-	err := db.QueryRow(`
+func UpdateForum(db *sql.DB, f *Forum) error {
+	_, err := db.Exec(`
 		update forums
-			set title = $2, updated_at = $3
-			where id = $1
-			returning id, title, created_at, updated_at
-	`, f.ID, f.Title, time.Now()).Scan(&forum.ID, &forum.Title, &forum.CreatedAt, &forum.UpdatedAt)
-
+		set title = $2, updated_at = $3
+		where id = $1
+	`, f.ID, f.Title, f.UpdatedAt)
 	if err != nil {
-		return nil, err
+		return err
 	}
-
-	return &forum, nil
+	return nil
 }
 
 // DeleteForum delete forum by ForumID

@@ -2,6 +2,7 @@ package model
 
 import (
 	"database/sql"
+	"fmt"
 	"time"
 )
 
@@ -76,12 +77,15 @@ func UpdateComment(db *sql.DB, c *Comment) error {
 
 // DeleteComment delete from comment table
 func DeleteComment(db *sql.DB, id int) error {
-	_, err := db.Exec(`
+	res, err := db.Exec(`
 		delete from comments
 		where id = $1
 	`, id)
-	if err != nil {
-		return err
+	if err == nil {
+		count, err := res.RowsAffected()
+		if err == nil && count != 1 {
+			return fmt.Errorf(`comments does not delete`)
+		}
 	}
 	return nil
 }

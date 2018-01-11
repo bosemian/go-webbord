@@ -4,8 +4,17 @@ go:
   - 1.7.x
   - 1.8.x
 
+services:
+  - postgresql
+
+addons:
+  postgresql: "9.6"
+
 before_install:
   - go get github.com/mattn/goveralls
+
+before_script:
+  - psql -c 'create database gowebbord_ci_test;' -U postgres
 
 scrips:
   - $HOME/bin/goveralls -service=travis-ci

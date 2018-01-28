@@ -11,15 +11,14 @@ type UserController interface {
 	SignIn(*UserSignInRequest) (*UserSignInResponse, error)
 	SignOut(*UserSignOutRequest) (*UserSignOutResponse, error)
 	ChangePassword(*UserChangePasswordRequest) error
-	GetAllUsers(int) (*User, error)
-	GetUser(int) *Users
+	GetUser(int) (*User, error)
 }
 
 // UserSignInRequest is a struct of
 // sign in request for UserController
 type UserSignInRequest struct {
-	Username string
-	Password string
+	Username string `json:"username"`
+	Password string `json:"password"`
 }
 
 // Validate UserSignInRequest
@@ -39,14 +38,14 @@ func (u *UserSignInRequest) Validate() error {
 // UserSignInResponse is a struct of
 // sign in response for UserController
 type UserSignInResponse struct {
-	Token  string
-	UserId int
+	Token  string `json:"token"`
+	UserID int    `json:"user_id"`
 }
 
 // UserSignOutRequest is a struct of
 // sign out request for UserController
 type UserSignOutRequest struct {
-	Token string
+	Token string `json:"token"`
 }
 
 // Validate UserSignOutRequest
@@ -65,9 +64,9 @@ type UserSignOutResponse struct {
 // UserChangePasswordRequest is a struct of
 // change password for UserController
 type UserChangePasswordRequest struct {
-	Token       string
-	OldPassword string
-	NewPassword string
+	Token       string `json:"token"`
+	OldPassword string `jsom:"old_password"`
+	NewPassword string `json:"new_password"`
 }
 
 // Validate UserChangePasswordRequest
@@ -84,22 +83,19 @@ func (u *UserChangePasswordRequest) Validate() error {
 	return nil
 }
 
+// Validate get user by id
+func (u *User) Validate() error {
+	if u.UserID == 0 {
+		return fmt.Errorf("user id not correct")
+	}
+	return nil
+}
+
 // User is a struct of get user for UserController
 type User struct {
-	UserId    int
-	Username  string
-	Password  string
-	CreatedAt time.Time
-	UpdatedAt time.Time
-}
-
-type Users struct {
-	count int
-	Users []*User
-}
-
-// CurrentUser is a struct for any request
-type CurrentUser struct {
-	Id   int
-	Name string
+	UserID    int       `json:"user_id"`
+	Username  string    `json:"username"`
+	Password  string    `json:"password"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }

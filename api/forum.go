@@ -9,7 +9,7 @@ import (
 type ForumController interface {
 	Create(*ForumCreateRequest) (*ForumCreateResponse, error)
 	Update(*ForumUpdateRequest) (*ForumUpdateResponse, error)
-	List(*ForumListRequest) (*ForumListResponse, error)
+	List() (*ForumListResponse, error)
 	Get(int) (*Forum, error)
 	Delete(int) error
 }
@@ -57,20 +57,6 @@ func (req *ForumUpdateRequest) Validate() error {
 }
 
 type ForumUpdateResponse struct {
-}
-
-// ForumListRequest is a struct
-// for ForumController
-type ForumListRequest struct {
-	Forums []*Forum
-}
-
-// Validate validate ForumListRequest
-func (req *ForumListRequest) Validate() error {
-	if len(req.Forums) == 0 {
-		return fmt.Errorf("ForumList is empty")
-	}
-	return nil
 }
 
 // ForumListResponse for list

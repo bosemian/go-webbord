@@ -4,21 +4,9 @@ go:
   - 1.7.x
   - 1.8.x
 
-env:
-  -
-
-services:
-  - postgresql
-
-addons:
-  postgresql: "9.6"
-
 before_install:
   - go get github.com/mattn/goveralls
 
-before_script:
-  - psql -c "CREATE DATABASE gowebbord_db_test;" -U postgres
-  - psql -c "CREATE USER admin WITH PASSWORD 'password';" -U postgres
 
 scrips:
-  - $HOME/bin/goveralls -service=travis-ci
+  - $HOME/gopath/bin/goveralls -service=travis-ci

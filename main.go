@@ -17,10 +17,12 @@ func main() {
 	userCtrl := ctrl.NewUserController()
 	forumCtrl := ctrl.NewForumController()
 	topicCtrl := ctrl.NewTopicController()
+	commentCtrl := ctrl.NewCommentController()
 
 	app.MountUserController(api, userCtrl)
 	app.MountForumController(api, forumCtrl)
 	app.MountTopicController(api, topicCtrl)
+	app.MountCommentController(api, commentCtrl)
 
 	err := http.ListenAndServe(":8080", mux)
 	if err != nil {

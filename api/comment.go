@@ -7,7 +7,7 @@ import (
 
 type CommentController interface {
 	Create(*CommentCreateRequest) (*CommentCreateResponse, error)
-	List(int) (*CommentList, error)
+	List() (*CommentList, error)
 	Update(*CommentUpdateRequest, error) (*CommentUpdateResponse, error)
 	Delete(int) error
 }

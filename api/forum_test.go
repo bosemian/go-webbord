@@ -60,11 +60,3 @@ func TestValidateForumUpdateRequest(t *testing.T) {
 		}
 	}
 }
-
-func TestValidateForumListRequest(t *testing.T) {
-	req := api.ForumListRequest{}
-	err := req.Validate()
-	if err == nil {
-		t.Errorf("expected error; but got nil")
-	}
-}

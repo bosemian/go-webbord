@@ -73,8 +73,8 @@ type TopicList struct {
 }
 
 type Topic struct {
-	TopicId   int
-	ForumId   int
+	TopicID   int
+	ForumID   int
 	TopicName string
 	CreatedAt time.Time
 	UpdatedAt time.Time

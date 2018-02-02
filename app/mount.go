@@ -9,6 +9,7 @@ import (
 	"github.com/bosemian/go-webbord/api"
 )
 
+// MountUserController mounts user controller into http serve mux
 func MountUserController(mux *http.ServeMux, ctrl api.UserController) {
 	mux.Handle("/auth/signin", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
@@ -110,7 +111,7 @@ func MountUserController(mux *http.ServeMux, ctrl api.UserController) {
 
 		err = req.Validate()
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		resp, err := ctrl.GetUser(req.UserID)
@@ -124,6 +125,7 @@ func MountUserController(mux *http.ServeMux, ctrl api.UserController) {
 	}))
 }
 
+// MountForumController mounts forum controller into http serve mux
 func MountForumController(mux *http.ServeMux, ctrl api.ForumController) {
 	// Create Forum
 	mux.Handle("/forums/create", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -157,7 +159,7 @@ func MountForumController(mux *http.ServeMux, ctrl api.ForumController) {
 	// Update Forum
 	mux.Handle("/forums/update", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log.Println(r.URL.Path[8:])
-		if r.Method != http.MethodPatch {
+		if r.Method != http.MethodPost {
 			http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 			return
 		}
@@ -186,19 +188,19 @@ func MountForumController(mux *http.ServeMux, ctrl api.ForumController) {
 	}))
 
 	// Delete Forum
-	mux.Handle("/forums/delete/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodDelete {
+	mux.Handle("/forums/delete", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
 			http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 			return
 		}
 
-		var forumID = r.URL.Path[15:]
-		id, err := strconv.Atoi(forumID)
+		var req api.Forum
+		err := json.NewDecoder(r.Body).Decode(&req)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			http.Error(w, "Bad Request", http.StatusBadRequest)
 			return
 		}
-		err = ctrl.Delete(id)
+		err = ctrl.Delete(req.ForumID)
 		if err != nil {
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			return
@@ -267,8 +269,8 @@ func MountTopicController(mux *http.ServeMux, ctrl api.TopicController) {
 	}))
 
 	// Update Topics
-	mux.Handle("/topics/edit", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodPatch {
+	mux.Handle("/topics/update", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
 			http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 			return
 		}
@@ -338,9 +340,23 @@ func MountTopicController(mux *http.ServeMux, ctrl api.TopicController) {
 		json.NewEncoder(w).Encode(resp)
 	}))
 
-	mux.Handle("/topics/delete/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodDelete {
-			http.Error(w, "Methods Not Allowed", http.StatusMethodNotAllowed)
+	// Delete Topic by topicID
+	mux.Handle("/topics/delete", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+			return
+		}
+
+		var req api.Topic
+		err := json.NewDecoder(r.Body).Decode(&req)
+		if err != nil {
+			http.Error(w, "Bad Request", http.StatusBadRequest)
+			return
+		}
+
+		err = ctrl.Delete(req.TopicID)
+		if err != nil {
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			return
 		}
 	}))

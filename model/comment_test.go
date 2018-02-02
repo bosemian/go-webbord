@@ -63,7 +63,7 @@ func TestDeleteComment(t *testing.T) {
 
 	db.Exec(`insert into comments (id, comment) values (1, 'comment1')`)
 
-	err := model.DeleteComment(db, 2)
+	err := model.DeleteComment(db, 1)
 	if err != nil {
 		t.Errorf(`DeleteComment expected return nil; but got %v`, err)
 	}

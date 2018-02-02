@@ -7,6 +7,5 @@ go:
 before_install:
   - go get github.com/mattn/goveralls
 
-
 scrips:
   - $HOME/gopath/bin/goveralls -service=travis-ci

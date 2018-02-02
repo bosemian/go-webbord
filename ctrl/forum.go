@@ -16,7 +16,7 @@ func (f *forumCtrl) Update(req *api.ForumUpdateRequest) (*api.ForumUpdateRespons
 	return nil, nil
 }
 
-func (f *forumCtrl) List(req *api.ForumListRequest) (*api.ForumListResponse, error) {
+func (f *forumCtrl) List() (*api.ForumListResponse, error) {
 	return nil, nil
 }
 

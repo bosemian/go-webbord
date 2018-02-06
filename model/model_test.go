@@ -8,9 +8,9 @@ import (
 	_ "github.com/lib/pq"
 )
 
-// const PATH_DB = "postgres://postgres@localhost:5432?sslmode=disable"
+const PATH_DB = "postgres://postgres@localhost:5432?sslmode=disable"
 
-const PATH_DB_DOCKER = "postgres://postgres:password@192.168.99.100:5432?sslmode=disable"
+// const PATH_DB_DOCKER = "postgres://postgres:password@192.168.99.100:5432?sslmode=disable"
 
 func prepareDB(t *testing.T) *sql.DB {
 	db, err := sql.Open("postgres", PATH_DB)

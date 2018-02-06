@@ -75,6 +75,22 @@ func UpdateComment(db *sql.DB, c *Comment) error {
 	return nil
 }
 
+// Get comment By ID
+func GetComment(db *sql.DB, id int) (*Comment, error) {
+	var comment Comment
+	err := db.QueryRow(`
+		select
+			id, comment, created_at, updated_at
+		from forums
+		where id = $1
+	`, id).Scan(&comment.ID, &comment.Comment, &comment.CreatedAt, &comment.UpdatedAt)
+
+	if err != nil {
+		return nil, err
+	}
+	return &comment, nil
+}
+
 // DeleteComment delete from comment table
 func DeleteComment(db *sql.DB, id int) error {
 	res, err := db.Exec(`

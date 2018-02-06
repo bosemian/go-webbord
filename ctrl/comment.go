@@ -20,6 +20,10 @@ func (c *commentCtrl) List() (*api.CommentList, error) {
 	return nil, nil
 }
 
+func (c *commentCtrl) Get(commentID int) (*api.Comment, error) {
+	return nil, nil
+}
+
 func (c *commentCtrl) Delete(commentID int) error {
 	return nil
 }

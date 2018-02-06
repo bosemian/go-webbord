@@ -8,11 +8,12 @@ import (
 	_ "github.com/lib/pq"
 )
 
-const PATH_DB = "postgres://postgres@localhost:5432?sslmode=disable"
+// const PATH_DB = "postgres://postgres@localhost:5432?sslmode=disable"
 
-// const PATH_DB_DOCKER = "postgres://postgres:password@192.168.99.100:5432?sslmode=disable"
+const PATH_DB_DOCKER = "postgres://postgres:password@192.168.99.100:5432?sslmode=disable"
+
 func prepareDB(t *testing.T) *sql.DB {
-	db, err := sql.Open("postgres", PATH_DB)
+	db, err := sql.Open("postgres", PATH_DB_DOCKER)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -30,7 +31,7 @@ func prepareDB(t *testing.T) *sql.DB {
 
 	db.Close()
 
-	db, err = sql.Open("postgres", "postgres://postgres:password@localhost:5432/gowebbord_test?sslmode=disable")
+	db, err = sql.Open("postgres", "postgres://postgres:password@192.168.99.100:5432/gowebbord_test?sslmode=disable")
 	if err != nil {
 		t.Fatal(err)
 	}
